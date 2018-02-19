@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import org.pcsoft.framework.jfex.component.OverlayProgressBarPane?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.StackPane?>
+<fx:root type="StackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.data.ComboBoxExView">
+    <children>
+        <ComboBox fx:id="cmb" maxWidth="1.7976931348623157E308"/>
+        <OverlayProgressBarPane fx:id="pnlProgress"/>
+    </children>
+</fx:root>

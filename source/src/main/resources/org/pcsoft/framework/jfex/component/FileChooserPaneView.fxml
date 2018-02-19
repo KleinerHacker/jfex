@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.image.Image?>
+<fx:root spacing="5.0" type="HBox" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.component.FileChooserPaneView">
+   <children>
+      <StackPane alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+         <children>
+            <TextField fx:id="txtFilePlace" editable="false" managed="${txtFilePlace.visible}" promptText="%cmp.file.chooser.prompt" />
+            <Label fx:id="lblFilePlace" managed="${lblFilePlace.visible}" maxWidth="1.7976931348623157E308" text="File Place">
+               <StackPane.margin>
+                  <Insets left="5.0" />
+               </StackPane.margin>
+            </Label>
+            <ImageView fx:id="imgClear" fitHeight="16.0" fitWidth="16.0" onMouseClicked="#onClickClear" pickOnBounds="true" preserveRatio="true">
+               <StackPane.margin>
+                  <Insets right="5.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@/icons/ic_clear16.png"/>
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionChooseFile" prefWidth="50.0" text="..." />
+   </children>
+</fx:root>

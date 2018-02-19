@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="pnlProgress" alignment="CENTER" spacing="15.0" style="-fx-background-color: rgba(0, 0, 0, 0.5);" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.component.OverlayProgressIndicatorPaneView">
+   <children>
+      <ProgressIndicator fx:id="pbProgress" maxHeight="250.0" maxWidth="250.0" minHeight="75.0" minWidth="75.0" VBox.vgrow="ALWAYS" />
+      <Label fx:id="lblProgress" text="Please wait..." textFill="WHITE">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+   </children>
+</VBox>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.BorderPane?>
+<fx:root fx:id="pnlRoot" alignment="CENTER_LEFT" spacing="3.0" styleClass="ribbon-group-title" type="HBox" xmlns="http://javafx.com/javafx/8.0.72"
+         xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.ribbon.component.internal.InternalRibbonGroupTitleView">
+    <children>
+        <Label fx:id="lblTitle" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Group Title" HBox.hgrow="ALWAYS"/>
+        <BorderPane styleClass="ribbon-button">
+            <center>
+                <ImageView fx:id="imgAction" fitHeight="8.0" fitWidth="8.0" managed="${imgAction.visible}" onMouseClicked="#onActionMouseClick"
+                           pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/icons/ic_ribbon_action8.png"/>
+                    </image>
+                </ImageView>
+            </center>
+        </BorderPane>
+    </children>
+</fx:root>

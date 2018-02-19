@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root hgap="5.0" style="-fx-background-color: white;" type="GridPane" vgap="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.workflow.element.WorkflowTestElementComponentView">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+      <ColumnConstraints hgrow="SOMETIMES" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+      <ColumnConstraints hgrow="SOMETIMES" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <Label style="-fx-font-weight: bold;" text="Primitives" GridPane.columnSpan="2" />
+      <Label style="-fx-font-weight: bold;" text="Extensions" GridPane.columnIndex="3" GridPane.columnSpan="2" />
+      <Separator orientation="VERTICAL" GridPane.columnIndex="2" GridPane.rowSpan="7" />
+      <Label text="Name:" GridPane.rowIndex="2" />
+      <Label fx:id="lblName" text="&lt;NAME&gt;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label text="Integer:" GridPane.rowIndex="3" />
+      <Label fx:id="lblInteger" text="&lt;NUMBER&gt;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label text="Double:" GridPane.rowIndex="4" />
+      <Label fx:id="lblDouble" text="&lt;NUMBER&gt;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label text="Byte Blob:" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+      <Label fx:id="lblBlobLength" text="&lt;LENGTH&gt;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+      <Label fx:id="lblBlobHash" text="&lt;HASH&gt;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+      <Label text="Color:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <Label text="Checked:" GridPane.rowIndex="5" />
+      <Label fx:id="lblChecked" text="&lt;TRUE/FALSE&gt;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label text="Enumeration:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <Label fx:id="lblEnumeration" text="&lt;LABEL&gt;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+      <Label text="Character:" GridPane.rowIndex="6" />
+      <Label fx:id="lblCharacter" text="&lt;CHAR&gt;" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Separator GridPane.columnSpan="5" GridPane.rowIndex="1" />
+      <Circle fx:id="circleColor" radius="5.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+   </children>
+   <padding>
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+   </padding>
+</fx:root>

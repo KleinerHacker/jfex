@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.pcsoft.framework.jfex.ribbon.component.internal.InternalRibbonMenu?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root styleClass="ribbon-menu-pane" type="VBox" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.ribbon.component.internal.InternalRibbonMenuPaneView">
+   <children>
+      <Separator maxWidth="1.7976931348623157E308" styleClass="ribbon-menu-line" />
+      <HBox maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+         <children>
+            <InternalRibbonMenu fx:id="menu" prefWidth="150" />
+            <StackPane alignment="BOTTOM_RIGHT" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <children>
+                  <BorderPane fx:id="pnlContent" style="-fx-background-image: url('/image/ribbon.png'); -fx-background-position: right bottom; -fx-background-repeat: no-repeat; -fx-background-size: 500px 200px" styleClass="ribbon-menu-area" />
+                  <Pane maxWidth="500" maxHeight="200" blendMode="OVERLAY" mouseTransparent="true" style="-fx-background-color: linear-gradient(#ffffff 10%, #eeeeee 50%, #cccccc 70%, #aaaaaa 80%, #111111)" />
+                  <Pane styleClass="ribbon-image" maxWidth="500" maxHeight="200" blendMode="OVERLAY" mouseTransparent="true"/>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </children>
+</fx:root>

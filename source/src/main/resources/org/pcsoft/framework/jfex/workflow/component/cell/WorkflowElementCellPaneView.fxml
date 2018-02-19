@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<fx:root spacing="5.0" type="HBox" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.workflow.component.cell.WorkflowElementCellPaneView">
+   <children>
+      <ImageView fx:id="imgIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </HBox.margin>
+      </ImageView>
+      <VBox>
+         <children>
+            <Label fx:id="lblTitle" style="-fx-font-weight: bold;" text="Title" />
+            <Label fx:id="lblDescription" style="-fx-font-size: 7pt;" text="Description" textAlignment="JUSTIFY" wrapText="true" />
+         </children>
+      </VBox>
+   </children>
+</fx:root>

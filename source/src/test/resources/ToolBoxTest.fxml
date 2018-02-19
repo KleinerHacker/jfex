@@ -1,0 +1,50 @@
+<?import javafx.scene.layout.*?>
+<?import org.pcsoft.framework.jfex.toolbox.ToolBox?>
+<?import org.pcsoft.framework.jfex.toolbox.ToolBoxDescriptor?>
+<?import javafx.scene.control.Label?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="800.0" prefWidth="1280.0" fx:controller="org.pcsoft.framework.jfex.toolbox.ToolBoxController">
+    <left>
+        <ToolBox orientation="LEFT" selectionMode="MULTIPLE">
+            <items>
+                <ToolBoxDescriptor title="Left Pane 2" orderNumber="2">
+                    <content>
+                        <Label text="Left Pane 2 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+                <ToolBoxDescriptor title="Left Pane 1" orderNumber="1">
+                    <content>
+                        <Label text="Left Pane 1 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+                <ToolBoxDescriptor title="Left Pane 3" orderNumber="3">
+                    <content>
+                        <Label text="Left Pane 3 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+            </items>
+        </ToolBox>
+    </left>
+    <right>
+        <ToolBox orientation="RIGHT" selectionMode="MULTIPLE">
+            <items>
+                <ToolBoxDescriptor title="Right Pane 3" orderNumber="3">
+                    <content>
+                        <Label text="Right Pane 3 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+                <ToolBoxDescriptor title="Right Pane 1" orderNumber="1">
+                    <content>
+                        <Label text="Right Pane 1 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+                <ToolBoxDescriptor title="Right Pane 2" orderNumber="2">
+                    <content>
+                        <Label text="Right Pane 2 Label" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308" alignment="CENTER"/>
+                    </content>
+                </ToolBoxDescriptor>
+            </items>
+        </ToolBox>
+    </right>
+</BorderPane>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.geometry.Insets?>
+<fx:root fx:id="pnlRoot" alignment="TOP_CENTER" styleClass="ribbon-button,ribbon-split-menu-button" type="HBox" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.ribbon.component.internal.InternalRibbonSmallSplitMenuButtonView">
+   <children>
+      <HBox styleClass="ribbon-split-button" alignment="CENTER_LEFT" spacing="3.0" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fx:id="imgIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#onActionMouseClick"/>
+            <Label fx:id="lblTitle" text="Label" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <HBox styleClass="ribbon-split-menu" onMouseClicked="#onMenuMouseClick" alignment="CENTER">
+         <children>
+            <SVGPath content="M0,0 H6 L3,6 Z" style="${lblTitle.style}"/>
+         </children>
+      </HBox>
+   </children>
+</fx:root>
