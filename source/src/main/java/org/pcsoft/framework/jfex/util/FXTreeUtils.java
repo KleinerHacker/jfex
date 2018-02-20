@@ -1,11 +1,9 @@
 package org.pcsoft.framework.jfex.util;
 
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableView;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -147,12 +145,94 @@ public final class FXTreeUtils extends FXSelectionModelUtils {
     }
     //endregion
 
-    public static <T> void reselect(TreeView<T> cmb) {
-        reselect(cmb.getSelectionModel());
+    public static <T> void reselect(TreeView<T> treeView) {
+        reselect(treeView.getSelectionModel());
     }
 
-    public static <T> void reselect(TreeTableView<T> cmb) {
-        reselect(cmb.getSelectionModel());
+    public static <T> void reselect(TreeTableView<T> treeTableView) {
+        reselect(treeTableView.getSelectionModel());
+    }
+
+    public static <T> void moveBottom(TreeView<T> treeView, TreeItem<T> treeItem) {
+        moveDown(treeView.getSelectionModel(), treeItem, -1);
+    }
+
+    public static <T> void moveBottom(TreeTableView<T> treeTableView, TreeItem<T> treeItem) {
+        moveDown(treeTableView.getSelectionModel(), treeItem, -1);
+    }
+
+    public static <T> void moveDown(TreeView<T> treeView, TreeItem<T> treeItem) {
+        moveDown(treeView.getSelectionModel(), treeItem, 1);
+    }
+
+    public static <T> void moveDown(TreeTableView<T> treeTableView, TreeItem<T> treeItem) {
+        moveDown(treeTableView.getSelectionModel(), treeItem, 1);
+    }
+
+    public static <T> void moveDown(TreeView<T> treeView, TreeItem<T> treeItem, int shiftCount) {
+        moveDown(treeView.getSelectionModel(), treeItem, shiftCount);
+    }
+
+    public static <T> void moveDown(TreeTableView<T> treeTableView, TreeItem<T> treeItem, int shiftCount) {
+        moveDown(treeTableView.getSelectionModel(), treeItem, shiftCount);
+    }
+
+    public static <T> void moveTop(TreeView<T> treeView, TreeItem<T> treeItem) {
+        moveUp(treeView.getSelectionModel(), treeItem, -1);
+    }
+
+    public static <T> void moveTop(TreeTableView<T> treeTableView, TreeItem<T> treeItem) {
+        moveUp(treeTableView.getSelectionModel(), treeItem, -1);
+    }
+
+    public static <T> void moveUp(TreeView<T> treeView, TreeItem<T> treeItem) {
+        moveUp(treeView.getSelectionModel(), treeItem, 1);
+    }
+
+    public static <T> void moveUp(TreeTableView<T> treeTableView, TreeItem<T> treeItem) {
+        moveUp(treeTableView.getSelectionModel(), treeItem, 1);
+    }
+
+    public static <T> void moveUp(TreeView<T> treeView, TreeItem<T> treeItem, int shiftCount) {
+        moveUp(treeView.getSelectionModel(), treeItem, shiftCount);
+    }
+
+    public static <T> void moveUp(TreeTableView<T> treeTableView, TreeItem<T> treeItem, int shiftCount) {
+        moveUp(treeTableView.getSelectionModel(), treeItem, shiftCount);
+    }
+
+    private static <T> void moveUp(final SelectionModel<TreeItem<T>> selectionModel, final TreeItem<T> treeItem, final int shiftCount) {
+        if (treeItem.getParent() == null)
+            return;
+
+        final int index = treeItem.getParent().getChildren().indexOf(treeItem);
+
+        treeItem.getChildren().remove(treeItem);
+
+        if (shiftCount < 0) {
+            treeItem.getChildren().add(0, treeItem);
+            selectionModel.select(treeItem);
+        } else {
+            treeItem.getChildren().add(index - shiftCount, treeItem);
+            selectionModel.select(treeItem);
+        }
+    }
+
+    private static <T> void moveDown(final SelectionModel<TreeItem<T>> selectionModel, final TreeItem<T> treeItem, final int shiftCount) {
+        if (treeItem.getParent() == null)
+            return;
+
+        final int index = treeItem.getParent().getChildren().indexOf(treeItem);
+
+        treeItem.getChildren().remove(treeItem);
+
+        if (shiftCount < 0) {
+            treeItem.getChildren().add(treeItem);
+            selectionModel.select(treeItem);
+        } else {
+            treeItem.getChildren().add(index + shiftCount, treeItem);
+            selectionModel.select(treeItem);
+        }
     }
 
     private FXTreeUtils() {

@@ -9,17 +9,14 @@ import org.pcsoft.framework.jfex.io.UiStateStorage;
 import org.pcsoft.framework.jfex.type.ChooserType;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Utility Class to show a chooser
  */
 public final class FXChooserUtils {
 
-    //region File Open Chooser
+    //region File Save Chooser
     public static Optional<File> showFileSaveChooser(final String title, final FileChooser.ExtensionFilter... extensionFilters) {
         return showFileSaveChooser(title, null, null, extensionFilters);
     }
@@ -49,7 +46,7 @@ public final class FXChooserUtils {
     }
 
     public static Optional<File> showFileSaveChooser(final String title, final File selectedFile, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
-        return showChooser(ChooserType.FileSave, title, selectedFile, storageKey, extensionFilters);
+        return showChooser(ChooserType.FileSave, title, selectedFile, storageKey, extensionFilters, false).map(list -> list.get(0));
     }
     //endregion
 
@@ -83,7 +80,41 @@ public final class FXChooserUtils {
     }
 
     public static Optional<File> showFileOpenChooser(final String title, final File selectedFile, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
-        return showChooser(ChooserType.FileOpen, title, selectedFile, storageKey, extensionFilters);
+        return showChooser(ChooserType.FileOpen, title, selectedFile, storageKey, extensionFilters, false).map(list -> list.get(0));
+    }
+    //endregion
+
+    //region File Open Multiple Chooser
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final FileChooser.ExtensionFilter... extensionFilters) {
+        return showFileOpenMultipleChooser(title, null, null, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
+        return showFileOpenMultipleChooser(title, null, null, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final String storageKey, final FileChooser.ExtensionFilter... extensionFilters) {
+        return showFileOpenMultipleChooser(title, null, storageKey, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
+        return showFileOpenMultipleChooser(title, null, storageKey, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final File selectedFile, final FileChooser.ExtensionFilter... extensionFilters) {
+        return showFileOpenMultipleChooser(title, selectedFile, null, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final File selectedFile, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
+        return showFileOpenMultipleChooser(title, selectedFile, null, extensionFilters);
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final File selectedFile, final String storageKey, final FileChooser.ExtensionFilter... extensionFilters) {
+        return showFileOpenMultipleChooser(title, selectedFile, storageKey, Arrays.asList(extensionFilters));
+    }
+
+    public static Optional<List<File>> showFileOpenMultipleChooser(final String title, final File selectedFile, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
+        return showChooser(ChooserType.FileOpen, title, selectedFile, storageKey, extensionFilters, true);
     }
     //endregion
 
@@ -130,12 +161,12 @@ public final class FXChooserUtils {
      * @return
      */
     public static Optional<File> showDirectoryChooser(final String title, final File selectedFile, final String storageKey) {
-        return showChooser(ChooserType.Directory, title, selectedFile, storageKey, null);
+        return showChooser(ChooserType.Directory, title, selectedFile, storageKey, null, false).map(list -> list.get(0));
     }
     //endregion
 
     //region Basic Methods
-    private static Optional<File> showChooser(final ChooserType chooserType, final String title, final File selectedFile, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters) {
+    private static Optional<List<File>> showChooser(final ChooserType chooserType, final String title, final File selectedFile, final String storageKey, final Collection<FileChooser.ExtensionFilter> extensionFilters, boolean multiple) {
         final StringProperty lastDirectoryProperty;
         if (storageKey != null) {
             lastDirectoryProperty = new SimpleStringProperty();
@@ -145,14 +176,15 @@ public final class FXChooserUtils {
         }
 
         if (chooserType == ChooserType.Directory) {
-            return Optional.ofNullable(handleDirectory(title, selectedFile, storageKey, lastDirectoryProperty));
+            final File file = handleDirectory(title, selectedFile, storageKey, lastDirectoryProperty);
+            return Optional.ofNullable(file == null ? null : Collections.singletonList(file));
         } else if (chooserType == ChooserType.FileOpen || chooserType == ChooserType.FileSave) {
-            return Optional.ofNullable(handleFile(chooserType, title, selectedFile, storageKey, extensionFilters, lastDirectoryProperty));
+            return Optional.ofNullable(handleFile(chooserType, title, selectedFile, storageKey, extensionFilters, lastDirectoryProperty, multiple));
         } else
             throw new RuntimeException();
     }
 
-    private static File handleFile(ChooserType chooserType, String title, File selectedFile, String storageKey, Collection<FileChooser.ExtensionFilter> extensionFilters, StringProperty lastDirectoryProperty) {
+    private static List<File> handleFile(ChooserType chooserType, String title, File selectedFile, String storageKey, Collection<FileChooser.ExtensionFilter> extensionFilters, StringProperty lastDirectoryProperty, boolean multiple) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         if (extensionFilters == null || extensionFilters.isEmpty()) {
@@ -171,25 +203,31 @@ public final class FXChooserUtils {
             }
         }
 
-        final File file;
+        final List<File> fileList;
         switch (chooserType) {
             case FileOpen:
-                file = fileChooser.showOpenDialog(null);
+                if (multiple) {
+                    fileList = fileChooser.showOpenMultipleDialog(null);
+                } else {
+                    final File file = fileChooser.showOpenDialog(null);
+                    fileList = file == null ? null : Collections.singletonList(file);
+                }
                 break;
             case FileSave:
-                file = fileChooser.showSaveDialog(null);
+                final File file = fileChooser.showSaveDialog(null);
+                fileList = file == null ? null : Collections.singletonList(file);
                 break;
             default:
                 throw new RuntimeException();
         }
-        if (file != null && lastDirectoryProperty != null) {
-            lastDirectoryProperty.set(file.getParentFile().getAbsolutePath());
+        if (fileList != null && lastDirectoryProperty != null) {
+            lastDirectoryProperty.set(fileList.get(0).getParentFile().getAbsolutePath());
         }
         if (lastDirectoryProperty != null) {
             UiStateStorage.getInstance().getSystemPropertyGroup().unregisterProperty(storageKey);
         }
 
-        return file;
+        return fileList;
     }
 
     private static File handleDirectory(String title, File selectedFile, String storageKey, StringProperty lastDirectoryProperty) {
