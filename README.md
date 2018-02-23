@@ -1,5 +1,7 @@
 JFex is a very big Java FX Extension Library. See features below to understood dimensions :)
 
+Please visit the [WIKI](https://github.com/KleinerHacker/jfex/wiki)
+
 * Components
   * ToolBox
   * ListViewEx
@@ -9,7 +11,6 @@ JFex is a very big Java FX Extension Library. See features below to understood d
   * X-Spinner
   * BinaryTextField
   * OverlayProgressBar / OverlayProgressIndicator
-  * DataPane
   * FileChooserPane
   * DetailToolTip
   * Workflow
@@ -38,3 +39,5 @@ JFex is a very big Java FX Extension Library. See features below to understood d
     * for Spinner
 * IO
   * UIStageStorage
+* Threading
+  * JfxUiThreadPool
