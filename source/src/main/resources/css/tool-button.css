@@ -1,16 +1,17 @@
 .tool-button {
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-color;
     -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-border-radius: 0;
     -fx-padding: 2px 5px 2px 5px;
+    -fx-text-fill: -fx-dark-text-color;
 }
 .tool-button:hover {
-    -fx-background-color: lightgray;
+    -fx-background-color: -fx-accent;
 }
 .tool-button:pressed {
-    -fx-background-color: darkgray;
+    -fx-background-color: -fx-background;
 }
 .tool-button:selected {
-    -fx-background-color: silver;
+    -fx-background-color: -fx-selection-bar-non-focused;
 }

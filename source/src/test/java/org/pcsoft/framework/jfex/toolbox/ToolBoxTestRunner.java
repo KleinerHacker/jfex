@@ -18,6 +18,7 @@ public class ToolBoxTestRunner extends Application {
     public void start(Stage primaryStage) throws Exception {
         final FXMLLoader loader = new FXMLLoader();
         final Pane pane = loader.load(getClass().getResourceAsStream("/ToolBoxTest.fxml"));
+        pane.getStylesheets().add("/css/modena_dark.css");
 
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setScene(new Scene(pane, 800, 600));
