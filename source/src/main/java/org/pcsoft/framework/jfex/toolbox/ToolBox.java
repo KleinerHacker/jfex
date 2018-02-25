@@ -102,12 +102,6 @@ public class ToolBox extends BorderPane {
         selectionModel.get().getSelectedItems().addListener(contentUpdater);
     }
 
-    private void updateSelectionModelListener(final MultipleSelectionModel<ToolBoxDescriptor> selectionModel) {
-        selectionModel.getSelectedIndices().addListener((ListChangeListener<Integer>) c -> {
-
-        });
-    }
-
     public ToolBoxOrientation getOrientation() {
         return orientation.get();
     }
