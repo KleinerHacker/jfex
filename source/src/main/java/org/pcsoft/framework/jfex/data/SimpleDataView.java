@@ -106,6 +106,8 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
                                 .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
                                 .collect(Collectors.toList())
                 );
+            } else {
+                viewModel.getFilteredItems().setAll(viewModel.getItems());
             }
 
             try {

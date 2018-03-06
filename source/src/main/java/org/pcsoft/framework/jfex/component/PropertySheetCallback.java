@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Special callback for {@link PropertySheetEx}
+ */
 class PropertySheetCallback implements Callback<PropertySheet.Item, PropertyEditor<?>> {
     private final Map<PropertySheet.Item, Function<PropertySheet.Item, PropertyEditor>> itemEditorMap = new HashMap<>();
     private final Map<Class<?>, Function<PropertySheet.Item, PropertyEditor>> typeEditorMap = new HashMap<>();

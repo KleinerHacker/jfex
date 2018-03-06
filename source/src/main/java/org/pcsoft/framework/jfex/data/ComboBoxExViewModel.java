@@ -17,7 +17,7 @@ public class ComboBoxExViewModel<T, G> extends SimpleDataViewModel<T, G, ListCel
     private final ObjectProperty<Item> selectedItem = new SimpleWrapperProperty<Item, T>(value) {
         @Override
         protected Item convertTo(T value) {
-            return new ItemValue(value);
+            return new ItemValue<>(value);
         }
 
         @Override

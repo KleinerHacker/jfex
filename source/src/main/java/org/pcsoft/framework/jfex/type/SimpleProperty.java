@@ -7,19 +7,29 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Property for property sheet, see {@link org.pcsoft.framework.jfex.component.PropertySheetEx}
+ * @param <T>
+ */
 public class SimpleProperty<T> implements PropertySheet.Item {
     private final Class<T> type;
     private final String name, description, category;
     private final Supplier<T> getter;
     private final Consumer<T> setter;
+    private final ObservableValue<T> observable;
 
     public SimpleProperty(Class<T> type, String name, String description, String category, Supplier<T> getter, Consumer<T> setter) {
+        this(type, name, description, category, getter, setter,  null);
+    }
+
+    public SimpleProperty(Class<T> type, String name, String description, String category, Supplier<T> getter, Consumer<T> setter, ObservableValue<T> observable) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.category = category;
         this.getter = getter;
         this.setter = setter;
+        this.observable = observable;
     }
 
     @Override
@@ -54,6 +64,6 @@ public class SimpleProperty<T> implements PropertySheet.Item {
 
     @Override
     public Optional<ObservableValue<? extends Object>> getObservableValue() {
-        return Optional.empty();
+        return Optional.ofNullable(observable);
     }
 }
