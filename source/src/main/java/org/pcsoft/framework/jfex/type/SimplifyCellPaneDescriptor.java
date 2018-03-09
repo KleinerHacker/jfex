@@ -2,7 +2,7 @@ package org.pcsoft.framework.jfex.type;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
-import org.pcsoft.framework.jfex.component.cell.SimplifyCellPane;
+import org.pcsoft.framework.jfex.ui.component.cell.SimplifyCellPane;
 
 import java.util.function.BiConsumer;
 

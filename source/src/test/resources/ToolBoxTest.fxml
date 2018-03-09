@@ -1,10 +1,10 @@
 <?import javafx.scene.layout.*?>
-<?import org.pcsoft.framework.jfex.toolbox.ToolBox?>
-<?import org.pcsoft.framework.jfex.toolbox.ToolBoxDescriptor?>
+<?import org.pcsoft.framework.jfex.component.toolbox.ToolBox?>
+<?import org.pcsoft.framework.jfex.component.toolbox.ToolBoxDescriptor?>
 <?import javafx.scene.control.Label?>
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="800.0" prefWidth="1280.0" fx:controller="org.pcsoft.framework.jfex.toolbox.ToolBoxController">
+            prefHeight="800.0" prefWidth="1280.0" fx:controller="org.pcsoft.framework.jfex.ui.component.toolbox.ToolBoxController">
     <left>
         <ToolBox orientation="LEFT" selectionMode="MULTIPLE">
             <items>

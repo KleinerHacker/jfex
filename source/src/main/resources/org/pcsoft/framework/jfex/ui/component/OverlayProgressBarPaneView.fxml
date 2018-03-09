@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.pcsoft.framework.jfex.ui.component.OverlayProgressBarPaneView" fx:id="pnlProgress">
+    <ProgressBar fx:id="pbProgress" maxWidth="1.7976931348623157E308"/>
+    <Label fx:id="lblProgress" text="Please wait..."/>
+</StackPane>

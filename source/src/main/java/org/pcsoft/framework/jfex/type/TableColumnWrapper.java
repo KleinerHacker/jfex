@@ -11,8 +11,8 @@ import javafx.css.Styleable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumnBase;
-import org.pcsoft.framework.jfex.data.CellRendererCallback;
-import org.pcsoft.framework.jfex.data.CellValueCallback;
+import org.pcsoft.framework.jfex.ui.component.data.CellRendererCallback;
+import org.pcsoft.framework.jfex.ui.component.data.CellValueCallback;
 
 import java.util.List;
 
