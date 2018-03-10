@@ -35,9 +35,12 @@ class PropertySheetCallback implements Callback<PropertySheet.Item, PropertyEdit
     @Override
     public PropertyEditor call(PropertySheet.Item param) {
         if (!itemEditorMap.containsKey(param)) {
-            final PropertyEditor<?> propertyEditor = typeEditorMap.get(param.getType()).apply(param);
-            if (propertyEditor != null)
-                return propertyEditor;
+            final Function<PropertySheet.Item, PropertyEditor> function = typeEditorMap.get(param.getType());
+            if (function != null) {
+                final PropertyEditor<?> propertyEditor = function.apply(param);
+                if (propertyEditor != null)
+                    return propertyEditor;
+            }
 
             return originalCallback.call(param);
         }

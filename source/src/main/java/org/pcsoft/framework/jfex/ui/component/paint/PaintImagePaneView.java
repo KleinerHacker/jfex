@@ -2,13 +2,13 @@ package org.pcsoft.framework.jfex.ui.component.paint;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
+import org.pcsoft.framework.jfex.property.ExtendedWrapperProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +28,17 @@ public class PaintImagePaneView implements FxmlView<PaintImagePaneViewModel>, In
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        viewModel.imagePatternProperty().bind(Bindings.createObjectBinding(
-                () -> imgValue.getImage() == null ? null : new ImagePattern(imgValue.getImage()),
-                imgValue.imageProperty()
-        ));
+        viewModel.imagePatternProperty().bindBidirectional(new ExtendedWrapperProperty<ImagePattern>(imgValue.imageProperty()) {
+            @Override
+            protected ImagePattern getPseudoValue() {
+                return imgValue.getImage() == null ? null : new ImagePattern(imgValue.getImage());
+            }
+
+            @Override
+            protected void setPseudoValue(ImagePattern value) {
+                imgValue.setImage(value.getImage());
+            }
+        });
     }
 
     @FXML

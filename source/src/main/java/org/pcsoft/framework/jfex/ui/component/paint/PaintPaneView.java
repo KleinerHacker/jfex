@@ -2,12 +2,13 @@ package org.pcsoft.framework.jfex.ui.component.paint;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.*;
 import javafx.util.StringConverter;
+import org.pcsoft.framework.jfex.property.ExtendedWrapperProperty;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -70,26 +71,48 @@ public class PaintPaneView implements FxmlView<PaintPaneViewModel>, Initializabl
             }
         });
 
-        viewModel.selectedPaintProperty().bind(Bindings.createObjectBinding(
-                () -> {
-                    if (cmbPaint.getValue() == null)
-                        return null;
+        viewModel.selectedPaintProperty().bindBidirectional(
+                new ExtendedWrapperProperty<Paint>(cmbPaint.valueProperty(), pnlColor.selectedColorProperty(),
+                        pnlImage.imageChooserCallbackProperty(), pnlLinearGradient.linearGradientProperty(),
+                        pnlRadialGradient.radialGradientProperty()) {
+                    @Override
+                    protected Paint getPseudoValue() {
+                        if (cmbPaint.getValue() == null)
+                            return null;
 
-                    switch (cmbPaint.getValue()) {
-                        case Color:
-                            //noinspection unchecked
-                            return pnlColor.getSelectedColor();
-                        case Image:
-                            return pnlImage.getImagePattern();
-                        case LinearGradient:
-                            return pnlLinearGradient.getLinearGradient();
-                        case RadialGradient:
-                            return pnlRadialGradient.getRadialGradient();
-                        default:
+                        switch (cmbPaint.getValue()) {
+                            case Color:
+                                //noinspection unchecked
+                                return pnlColor.getSelectedColor();
+                            case Image:
+                                return pnlImage.getImagePattern();
+                            case LinearGradient:
+                                return pnlLinearGradient.getLinearGradient();
+                            case RadialGradient:
+                                return pnlRadialGradient.getRadialGradient();
+                            default:
+                                throw new RuntimeException();
+                        }
+                    }
+
+                    @Override
+                    protected void setPseudoValue(Paint value) {
+                        if (value instanceof Color) {
+                            cmbPaint.setValue(PaintPaneViewModel.PaintType.Color);
+                            pnlColor.setSelectedColor((Color) value);
+                        } else if (value instanceof ImagePattern) {
+                            cmbPaint.setValue(PaintPaneViewModel.PaintType.Image);
+                            pnlImage.setImagePattern((ImagePattern) value);
+                        } else if (value instanceof LinearGradient) {
+                            cmbPaint.setValue(PaintPaneViewModel.PaintType.LinearGradient);
+                            pnlLinearGradient.setLinearGradient((LinearGradient) value);
+                        } else if (value instanceof RadialGradient) {
+                            cmbPaint.setValue(PaintPaneViewModel.PaintType.RadialGradient);
+                            pnlRadialGradient.setRadialGradient((RadialGradient) value);
+                        } else
                             throw new RuntimeException();
                     }
-                },
-                cmbPaint.valueProperty(), pnlColor.selectedColorProperty()
-        ));
+                }
+        );
     }
 }
