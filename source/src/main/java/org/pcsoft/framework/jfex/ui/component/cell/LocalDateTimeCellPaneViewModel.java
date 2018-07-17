@@ -1,49 +1,87 @@
 package org.pcsoft.framework.jfex.ui.component.cell;
 
 import de.saxsys.mvvmfx.ViewModel;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 
 public class LocalDateTimeCellPaneViewModel implements ViewModel {
 
-    private final StringProperty date = new SimpleStringProperty(), time = new SimpleStringProperty();
+    private final ObjectProperty<LocalDateTime> dateTime = new SimpleObjectProperty<>();
+    private final ObjectProperty<FormatStyle> dateFormatStyle = new SimpleObjectProperty<>(FormatStyle.LONG);
+    private final ObjectProperty<FormatStyle> timeFormatStyle = new SimpleObjectProperty<>(FormatStyle.LONG);
 
-    public String getDate() {
-        return date.get();
+    private final StringBinding dateString, timeString;
+
+    public LocalDateTimeCellPaneViewModel() {
+        dateString = Bindings.createStringBinding(
+                () -> dateTime.get() == null || dateFormatStyle.get() == null ? StringUtils.EMPTY : dateTime.get().format(DateTimeFormatter.ofLocalizedDate(dateFormatStyle.get())),
+                dateTime, dateFormatStyle
+        );
+        timeString = Bindings.createStringBinding(
+                () -> dateTime.get() == null || timeFormatStyle.get() == null ? StringUtils.EMPTY : ZonedDateTime.of(dateTime.get(), ZoneId.of("Z")).format(DateTimeFormatter.ofLocalizedTime(timeFormatStyle.get())),
+                dateTime, timeFormatStyle
+        );
     }
 
-    public StringProperty dateProperty() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime.get();
     }
 
-    public void setDate(String date) {
-        this.date.set(date);
+    public ObjectProperty<LocalDateTime> dateTimeProperty() {
+        return dateTime;
     }
 
-    public String getTime() {
-        return time.get();
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime.set(dateTime);
     }
 
-    public StringProperty timeProperty() {
-        return time;
+    public FormatStyle getDateFormatStyle() {
+        return dateFormatStyle.get();
     }
 
-    public void setTime(String time) {
-        this.time.set(time);
+    public ObjectProperty<FormatStyle> dateFormatStyleProperty() {
+        return dateFormatStyle;
     }
 
-    public void updateDateTime(LocalDateTime localDateTime) {
-        if (localDateTime == null) {
-            date.set("");
-            time.set("");
-        } else {
-            date.set(localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
-            time.set(localDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)));
-        }
+    public void setDateFormatStyle(FormatStyle dateFormatStyle) {
+        this.dateFormatStyle.set(dateFormatStyle);
+    }
+
+    public FormatStyle getTimeFormatStyle() {
+        return timeFormatStyle.get();
+    }
+
+    public ObjectProperty<FormatStyle> timeFormatStyleProperty() {
+        return timeFormatStyle;
+    }
+
+    public void setTimeFormatStyle(FormatStyle timeFormatStyle) {
+        this.timeFormatStyle.set(timeFormatStyle);
+    }
+
+    public String getDateString() {
+        return dateString.get();
+    }
+
+    public StringBinding dateStringProperty() {
+        return dateString;
+    }
+
+    public String getTimeString() {
+        return timeString.get();
+    }
+
+    public StringBinding timeStringProperty() {
+        return timeString;
     }
 }

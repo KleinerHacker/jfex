@@ -22,7 +22,7 @@ public class LocalDateTimeCellPaneView implements FxmlView<LocalDateTimeCellPane
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lblDate.textProperty().bind(viewModel.dateProperty());
-        lblTime.textProperty().bind(viewModel.timeProperty());
+        lblDate.textProperty().bind(viewModel.dateStringProperty());
+        lblTime.textProperty().bind(viewModel.timeStringProperty());
     }
 }

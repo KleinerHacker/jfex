@@ -20,6 +20,6 @@ public class LocalDateCellPaneView implements FxmlView<LocalDateCellPaneViewMode
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lblDate.textProperty().bind(viewModel.dateProperty());
+        lblDate.textProperty().bind(viewModel.dateStringProperty());
     }
 }
