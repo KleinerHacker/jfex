@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.pcsoft.framework.jftex.ExtendedApplicationTest;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 
 public class ListViewExTest extends ExtendedApplicationTest {
@@ -20,30 +21,37 @@ public class ListViewExTest extends ExtendedApplicationTest {
     @Override
     public void start(Stage stage) throws Exception {
         listViewEx = new ListViewEx<>();
+        listViewEx.setOnItemsLoaded(() -> listViewEx.getSelectionModel().select(6));
         listViewEx.setItemLoader(() -> {
             Thread.sleep(1000);
-            return Arrays.asList("Hallo", "Welt", "Bitte", "Nicht", "Stören", "Kanu", "Fahren", "Ist", "Schön", "Keiner", "Kann", "Was");
+            return Arrays.asList("Hallo", "Welt", "Bitte", "Nicht", "Stören", "Kanu", "Fahren", "Ist", "Schön", "Keiner", "Kann", "Was", null, null);
         });
-        listViewEx.setHeaderKeyExtractor(s -> s.substring(0, 1));
-        listViewEx.setValueComparator(String::compareTo);
-        listViewEx.setHeaderComparator(String::compareTo);
+        listViewEx.setHeaderKeyExtractor(s -> s == null ? null : s.charAt(0) + "");
+        listViewEx.setValueComparator(Comparator.nullsFirst(String::compareTo));
+        listViewEx.setHeaderComparator(Comparator.nullsFirst(String::compareTo));
         listViewEx.setValueCellRendererCallback((cell, item, empty) -> {
             cell.setStyle(null);
-            if (!empty && item != null) {
-                cell.setText(item);
+            if (!empty) {
+                if (item == null) {
+                    cell.setText("<null>");
+                } else {
+                    cell.setText(item);
+                }
             }
         });
         listViewEx.setHeaderCellRendererCallback((cell, item, empty) -> {
             cell.setStyle("-fx-font-weight: bold");
-            if (!empty && item != null) {
-                cell.setText(item);
+            if (!empty) {
+                if (item == null) {
+                    cell.setText("Undefined");
+                } else {
+                    cell.setText(item);
+                }
             }
         });
         listViewEx.getSelectionModel().selectedItemProperty().addListener((v, o, n) -> value.set(n));
         value.addListener((v, o, n) -> listViewEx.getSelectionModel().select(n));
         listViewEx.refresh();
-
-        value.set("Welt");
 
         try {
             stage.initStyle(StageStyle.UTILITY);
@@ -58,6 +66,13 @@ public class ListViewExTest extends ExtendedApplicationTest {
     public void test() throws Exception {
         Thread.sleep(1500);
 
+        Assert.assertEquals("Fahren", listViewEx.getSelectionModel().getSelectedItem());
+
+
+        Platform.runLater(() -> value.set("Welt"));
+
+        Thread.sleep(100);
+
         Assert.assertEquals("Welt", value.get());
         Assert.assertEquals("Welt", listViewEx.getSelectionModel().getSelectedItem());
 
@@ -67,7 +82,10 @@ public class ListViewExTest extends ExtendedApplicationTest {
         Assert.assertEquals("Hallo", value.get());
         Assert.assertEquals("Hallo", listViewEx.getSelectionModel().getSelectedItem());
 
-        Platform.runLater(() -> listViewEx.refresh());
+        Platform.runLater(() -> {
+            listViewEx.setOnItemsLoaded(null);
+            listViewEx.refresh();
+        });
         Thread.sleep(1500);
 
         Assert.assertEquals("Hallo", value.get());

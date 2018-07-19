@@ -4,6 +4,7 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -14,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -120,6 +118,9 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
 
     private void refreshList() {
         onStartRefresh();
+        if (viewModel.getOnItemsLoading() != null) {
+            viewModel.getOnItemsLoading().run();
+        }
 
         final Item selection = getSelection();
         setSelection(null);
@@ -143,7 +144,7 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
                 componentList.add(new ItemGroup<>(groupItem));
 
                 final List<T> valueItemList = viewModel.getFilteredItems().stream()
-                        .filter(item -> viewModel.getHeaderKeyExtractor().apply(item).equals(groupItem))
+                        .filter(item -> Objects.equals(viewModel.getHeaderKeyExtractor().apply(item), groupItem))
                         .collect(Collectors.toList());
                 refreshValueList(valueItemList);
             }
@@ -157,6 +158,9 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
                 .findFirst().orElse(selection)
         );
         onFinishRefresh();
+        if (viewModel.getOnItemsLoaded() != null) {
+            viewModel.getOnItemsLoaded().run();
+        }
     }
 
     private void refreshValueList(final List<T> valueItemList) {
@@ -227,4 +231,28 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
 
     protected abstract Item getSelection();
     protected abstract void setSelection(final Item item);
+
+    public Runnable getOnItemsLoaded() {
+        return viewModel.getOnItemsLoaded();
+    }
+
+    public ObjectProperty<Runnable> onItemsLoadedProperty() {
+        return viewModel.onItemsLoadedProperty();
+    }
+
+    public void setOnItemsLoaded(Runnable onItemsLoaded) {
+        viewModel.setOnItemsLoaded(onItemsLoaded);
+    }
+
+    public Runnable getOnItemsLoading() {
+        return viewModel.getOnItemsLoading();
+    }
+
+    public ObjectProperty<Runnable> onItemsLoadingProperty() {
+        return viewModel.onItemsLoadingProperty();
+    }
+
+    public void setOnItemsLoading(Runnable onItemsLoading) {
+        viewModel.setOnItemsLoading(onItemsLoading);
+    }
 }

@@ -89,4 +89,24 @@ public interface SimpleDataModel<T, G, C extends IndexedCell> {
     ObjectProperty<ProgressListener> progressListenerProperty();
 
     void setProgressListener(ProgressListener progressListener);
+
+    Runnable getOnItemsLoaded();
+
+    /**
+     * Called if items was loaded completely
+     * @return
+     */
+    ObjectProperty<Runnable> onItemsLoadedProperty();
+
+    void setOnItemsLoaded(Runnable onItemsLoaded);
+
+    Runnable getOnItemsLoading();
+
+    /**
+     * Called if items are started for loading
+     * @return
+     */
+    ObjectProperty<Runnable> onItemsLoadingProperty();
+
+    void setOnItemsLoading(Runnable onItemsLoading);
 }

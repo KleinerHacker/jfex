@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 
 public class ListViewExTestRunner extends Application {
@@ -21,13 +22,14 @@ public class ListViewExTestRunner extends Application {
     public void start(Stage primaryStage) throws Exception {
         final ListViewEx<String, String> listViewEx = new ListViewEx<>();
 //        listViewEx.getItems().setAll("Aber", "Alter", "Schöner", "Sabuerer", "Dummer", "Hübscher", "Zebra", "Ziel", "Zaun");
+        listViewEx.setOnItemsLoaded(() -> listViewEx.getSelectionModel().select(5));
         listViewEx.setItemLoader(() -> {
             Thread.sleep(1000);
-            return Arrays.asList("Aber", "Alter", "Schöner", "Sabuerer", "Dummer", "Hübscher", "Zebra", "Ziel", "Zaun");
+            return Arrays.asList("Aber", "Alter", "Schöner", "Sabuerer", "Dummer", "Hübscher", "Zebra", "Ziel", "Zaun", null, null);
         });
-        listViewEx.setHeaderKeyExtractor(value -> value.charAt(0) + "");
-        listViewEx.setHeaderComparator(String::compareTo);
-        listViewEx.setValueComparator(String::compareTo);
+        listViewEx.setHeaderKeyExtractor(value -> value == null ? null : value.charAt(0) + "");
+        listViewEx.setHeaderComparator(Comparator.nullsFirst(String::compareTo));
+        listViewEx.setValueComparator(Comparator.nullsFirst(String::compareTo));
         listViewEx.setEmptyText("Keine Daten Vorhanden");
         listViewEx.setEmptyTextStyle("-fx-text-fill: red");
         listViewEx.setHeaderCellRendererCallback((cell, item, empty) -> {
@@ -35,8 +37,12 @@ public class ListViewExTestRunner extends Application {
             cell.setGraphic(null);
             cell.setStyle(null);
 
-            if (item != null && !empty) {
-                cell.setText(item);
+            if (!empty) {
+                if (item == null) {
+                    cell.setText("Undefined");
+                } else {
+                    cell.setText(item);
+                }
                 cell.setStyle("-fx-font-weight: bold");
             }
         });
@@ -45,8 +51,12 @@ public class ListViewExTestRunner extends Application {
             cell.setGraphic(null);
             cell.setStyle(null);
 
-            if (item != null && !empty) {
-                cell.setText(item);
+            if (!empty) {
+                if (item == null) {
+                    cell.setText("<null>");
+                } else {
+                    cell.setText(item);
+                }
             }
         });
 

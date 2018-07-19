@@ -338,4 +338,34 @@ public class ListViewEx<T, G> extends StackPane implements MultipleSelectionData
     public void refresh() {
         view.refresh(true);
     }
+
+    @Override
+    public Runnable getOnItemsLoaded() {
+        return view.getOnItemsLoaded();
+    }
+
+    @Override
+    public ObjectProperty<Runnable> onItemsLoadedProperty() {
+        return view.onItemsLoadedProperty();
+    }
+
+    @Override
+    public void setOnItemsLoaded(Runnable onItemsLoaded) {
+        view.setOnItemsLoaded(onItemsLoaded);
+    }
+
+    @Override
+    public Runnable getOnItemsLoading() {
+        return view.getOnItemsLoading();
+    }
+
+    @Override
+    public ObjectProperty<Runnable> onItemsLoadingProperty() {
+        return view.onItemsLoadingProperty();
+    }
+
+    @Override
+    public void setOnItemsLoading(Runnable onItemsLoading) {
+        view.setOnItemsLoading(onItemsLoading);
+    }
 }

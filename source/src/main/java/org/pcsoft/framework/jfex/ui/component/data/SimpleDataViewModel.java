@@ -31,6 +31,9 @@ public abstract class SimpleDataViewModel<T, G, C extends IndexedCell> implement
 
     private final ObjectProperty<CellRendererCallback<C, Void>> emptyCellRendererCallback = new SimpleObjectProperty<>();
 
+    private final ObjectProperty<Runnable> onItemsLoaded = new SimpleObjectProperty<>();
+    private final ObjectProperty<Runnable> onItemsLoading = new SimpleObjectProperty<>();
+
     @Override
     public ObservableList<T> getFilteredItems() {
         return filteredItems.get();
@@ -219,5 +222,35 @@ public abstract class SimpleDataViewModel<T, G, C extends IndexedCell> implement
     @Override
     public void setProgressListener(ProgressListener progressListener) {
         this.progressListener.set(progressListener);
+    }
+
+    @Override
+    public Runnable getOnItemsLoaded() {
+        return onItemsLoaded.get();
+    }
+
+    @Override
+    public ObjectProperty<Runnable> onItemsLoadedProperty() {
+        return onItemsLoaded;
+    }
+
+    @Override
+    public void setOnItemsLoaded(Runnable onItemsLoaded) {
+        this.onItemsLoaded.set(onItemsLoaded);
+    }
+
+    @Override
+    public Runnable getOnItemsLoading() {
+        return onItemsLoading.get();
+    }
+
+    @Override
+    public ObjectProperty<Runnable> onItemsLoadingProperty() {
+        return onItemsLoading;
+    }
+
+    @Override
+    public void setOnItemsLoading(Runnable onItemsLoading) {
+        this.onItemsLoading.set(onItemsLoading);
     }
 }
