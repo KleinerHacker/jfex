@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends SimpleDataViewModel<T, G, C>> implements FxmlView<M>, Initializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDataView.class);
+    private static final Object LOADER_MONITOR = new Object();
 
     @InjectViewModel
     protected M viewModel;
@@ -48,70 +49,90 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
         if (ignoreUpdate.get())
             return;
 
-        if (needsContentUpdate && viewModel.getItemLoader() != null) {
-            if (viewModel.getProgressListener() != null) {
-                viewModel.getProgressListener().onStartProgress();
-            }
-            onShowProgress(viewModel.getLoadingText());
-
-            ignoreUpdate.set(true);
-            JfxUiThreadPool.submit(() -> {
-                LOGGER.debug("Startup async item loading...");
-                try {
-                    final List<T> itemList = viewModel.getItemLoader().onLoadItems();
-                    Platform.runLater(() -> viewModel.getItems().setAll(itemList));
-                    final List<T> filteredList;
-                    if (viewModel.getFilterCallback() != null) {
-                        filteredList = itemList.stream()
-                                .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
-                                .collect(Collectors.toList());
-                    } else {
-                        filteredList = itemList == null ? new ArrayList<>() : new ArrayList<>(itemList);
-                    }
-                    Platform.runLater(() -> {
-                        viewModel.getFilteredItems().setAll(filteredList);
-                        refreshList();
-
-                        if (viewModel.getProgressListener() != null) {
-                            viewModel.getProgressListener().onSuccess();
-                        }
-                    });
-                } catch (Exception e) {
-                    LOGGER.error("unable to load list", e);
-                    Platform.runLater(() -> {
-                        new Alert(Alert.AlertType.ERROR, resourceBundle.getString("cmp.data.error"), ButtonType.OK).showAndWait();
-                        if (viewModel.getProgressListener() != null) {
-                            viewModel.getProgressListener().onFailure(e);
-                        }
-                    });
-                } finally {
-                    Platform.runLater(() -> {
-                        onHideProgress();
-                        ignoreUpdate.set(false);
-
-                        if (viewModel.getProgressListener() != null) {
-                            viewModel.getProgressListener().onFinishProgress();
-                        }
-                    });
+        synchronized (LOADER_MONITOR) {
+            if (needsContentUpdate && viewModel.getItemLoader() != null) {
+                if (viewModel.getProgressListener() != null) {
+                    viewModel.getProgressListener().onStartProgress();
                 }
-            });
-        } else {
-            ignoreUpdate.set(true);
+                onShowProgress(viewModel.getLoadingText());
 
-            if (viewModel.getFilterCallback() != null) {
-                viewModel.getFilteredItems().setAll(
-                        viewModel.getItems().stream()
-                                .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
-                                .collect(Collectors.toList())
-                );
+                //Waiter for getting loader in started thread (stay in sync block while loader instance not safe)
+                final AtomicBoolean waitForGetLoader = new AtomicBoolean(false);
+
+                ignoreUpdate.set(true);
+                JfxUiThreadPool.submit(() -> {
+                    LOGGER.debug("Startup async item loading...");
+                    try {
+                        final ItemLoader<T> itemLoader;
+                        try {
+                            itemLoader = viewModel.getItemLoader();
+                        } finally {
+                            waitForGetLoader.set(true); //Loader was get (instance safe, leave sync block now)
+                        }
+
+                        final List<T> itemList = itemLoader.onLoadItems();
+                        Platform.runLater(() -> viewModel.getItems().setAll(itemList));
+                        final List<T> filteredList;
+                        if (viewModel.getFilterCallback() != null) {
+                            filteredList = itemList.stream()
+                                    .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
+                                    .collect(Collectors.toList());
+                        } else {
+                            filteredList = itemList == null ? new ArrayList<>() : new ArrayList<>(itemList);
+                        }
+                        Platform.runLater(() -> {
+                            viewModel.getFilteredItems().setAll(filteredList);
+                            refreshList();
+
+                            if (viewModel.getProgressListener() != null) {
+                                viewModel.getProgressListener().onSuccess();
+                            }
+                        });
+                    } catch (Exception e) {
+                        LOGGER.error("unable to load list", e);
+                        Platform.runLater(() -> {
+                            new Alert(Alert.AlertType.ERROR, resourceBundle.getString("cmp.data.error"), ButtonType.OK).showAndWait();
+                            if (viewModel.getProgressListener() != null) {
+                                viewModel.getProgressListener().onFailure(e);
+                            }
+                        });
+                    } finally {
+                        Platform.runLater(() -> {
+                            onHideProgress();
+                            ignoreUpdate.set(false);
+
+                            if (viewModel.getProgressListener() != null) {
+                                viewModel.getProgressListener().onFinishProgress();
+                            }
+                        });
+                    }
+                });
+
+                //Wait for getting loader in thread (stay in sync block)
+                while (!waitForGetLoader.get()) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ignored) {
+                    }
+                }
             } else {
-                viewModel.getFilteredItems().setAll(viewModel.getItems());
-            }
+                ignoreUpdate.set(true);
 
-            try {
-                refreshList();
-            } finally {
-                ignoreUpdate.set(false);
+                if (viewModel.getFilterCallback() != null) {
+                    viewModel.getFilteredItems().setAll(
+                            viewModel.getItems().stream()
+                                    .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
+                                    .collect(Collectors.toList())
+                    );
+                } else {
+                    viewModel.getFilteredItems().setAll(viewModel.getItems());
+                }
+
+                try {
+                    refreshList();
+                } finally {
+                    ignoreUpdate.set(false);
+                }
             }
         }
     }
