@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends SimpleDataViewModel<T, G, C>> implements FxmlView<M>, Initializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDataView.class);
-    private static final Object LOADER_MONITOR = new Object();
 
     @InjectViewModel
     protected M viewModel;
@@ -46,93 +45,76 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
     }
 
     void refresh(boolean needsContentUpdate) {
+        if (!Platform.isFxApplicationThread())
+            throw new IllegalStateException("Thread is not on Java FX Application Thread!");
         if (ignoreUpdate.get())
             return;
 
-        synchronized (LOADER_MONITOR) {
-            if (needsContentUpdate && viewModel.getItemLoader() != null) {
-                if (viewModel.getProgressListener() != null) {
-                    viewModel.getProgressListener().onStartProgress();
-                }
-                onShowProgress(viewModel.getLoadingText());
+        final ItemLoader<T> itemLoader = viewModel.getItemLoader();
+        if (needsContentUpdate && itemLoader != null) {
+            if (viewModel.getProgressListener() != null) {
+                viewModel.getProgressListener().onStartProgress();
+            }
+            onShowProgress(viewModel.getLoadingText());
 
-                //Waiter for getting loader in started thread (stay in sync block while loader instance not safe)
-                final AtomicBoolean waitForGetLoader = new AtomicBoolean(false);
-
-                ignoreUpdate.set(true);
-                JfxUiThreadPool.submit(() -> {
-                    LOGGER.debug("Startup async item loading...");
-                    try {
-                        final ItemLoader<T> itemLoader;
-                        try {
-                            itemLoader = viewModel.getItemLoader();
-                        } finally {
-                            waitForGetLoader.set(true); //Loader was get (instance safe, leave sync block now)
-                        }
-
-                        final List<T> itemList = itemLoader.onLoadItems();
-                        Platform.runLater(() -> viewModel.getItems().setAll(itemList));
-                        final List<T> filteredList;
-                        if (viewModel.getFilterCallback() != null) {
-                            filteredList = itemList.stream()
-                                    .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
-                                    .collect(Collectors.toList());
-                        } else {
-                            filteredList = itemList == null ? new ArrayList<>() : new ArrayList<>(itemList);
-                        }
-                        Platform.runLater(() -> {
-                            viewModel.getFilteredItems().setAll(filteredList);
-                            refreshList();
-
-                            if (viewModel.getProgressListener() != null) {
-                                viewModel.getProgressListener().onSuccess();
-                            }
-                        });
-                    } catch (Exception e) {
-                        LOGGER.error("unable to load list", e);
-                        Platform.runLater(() -> {
-                            new Alert(Alert.AlertType.ERROR, resourceBundle.getString("cmp.data.error"), ButtonType.OK).showAndWait();
-                            if (viewModel.getProgressListener() != null) {
-                                viewModel.getProgressListener().onFailure(e);
-                            }
-                        });
-                    } finally {
-                        Platform.runLater(() -> {
-                            onHideProgress();
-                            ignoreUpdate.set(false);
-
-                            if (viewModel.getProgressListener() != null) {
-                                viewModel.getProgressListener().onFinishProgress();
-                            }
-                        });
-                    }
-                });
-
-                //Wait for getting loader in thread (stay in sync block)
-                while (!waitForGetLoader.get()) {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ignored) {
-                    }
-                }
-            } else {
-                ignoreUpdate.set(true);
-
-                if (viewModel.getFilterCallback() != null) {
-                    viewModel.getFilteredItems().setAll(
-                            viewModel.getItems().stream()
-                                    .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
-                                    .collect(Collectors.toList())
-                    );
-                } else {
-                    viewModel.getFilteredItems().setAll(viewModel.getItems());
-                }
-
+            ignoreUpdate.set(true);
+            JfxUiThreadPool.submit(() -> {
+                LOGGER.debug("Startup async item loading...");
                 try {
-                    refreshList();
+                    final List<T> itemList = itemLoader.onLoadItems();
+                    Platform.runLater(() -> viewModel.getItems().setAll(itemList));
+                    final List<T> filteredList;
+                    if (viewModel.getFilterCallback() != null) {
+                        filteredList = itemList.stream()
+                                .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
+                                .collect(Collectors.toList());
+                    } else {
+                        filteredList = itemList == null ? new ArrayList<>() : new ArrayList<>(itemList);
+                    }
+                    Platform.runLater(() -> {
+                        viewModel.getFilteredItems().setAll(filteredList);
+                        refreshList();
+
+                        if (viewModel.getProgressListener() != null) {
+                            viewModel.getProgressListener().onSuccess();
+                        }
+                    });
+                } catch (Exception e) {
+                    LOGGER.error("unable to load list", e);
+                    Platform.runLater(() -> {
+                        new Alert(Alert.AlertType.ERROR, resourceBundle.getString("cmp.data.error"), ButtonType.OK).showAndWait();
+                        if (viewModel.getProgressListener() != null) {
+                            viewModel.getProgressListener().onFailure(e);
+                        }
+                    });
                 } finally {
-                    ignoreUpdate.set(false);
+                    Platform.runLater(() -> {
+                        onHideProgress();
+                        ignoreUpdate.set(false);
+
+                        if (viewModel.getProgressListener() != null) {
+                            viewModel.getProgressListener().onFinishProgress();
+                        }
+                    });
                 }
+            });
+        } else {
+            ignoreUpdate.set(true);
+
+            if (viewModel.getFilterCallback() != null) {
+                viewModel.getFilteredItems().setAll(
+                        viewModel.getItems().stream()
+                                .filter(item -> viewModel.getFilterCallback().apply(item, viewModel.getFilterValue()))
+                                .collect(Collectors.toList())
+                );
+            } else {
+                viewModel.getFilteredItems().setAll(viewModel.getItems());
+            }
+
+            try {
+                refreshList();
+            } finally {
+                ignoreUpdate.set(false);
             }
         }
     }
@@ -175,8 +157,8 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
 
         setSelection(
                 componentList.stream()
-                .filter(item -> item.equals(selection))
-                .findFirst().orElse(selection)
+                        .filter(item -> item.equals(selection))
+                        .findFirst().orElse(selection)
         );
         onFinishRefresh();
         if (viewModel.getOnItemsLoaded() != null) {
@@ -212,12 +194,14 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
 
     /**
      * Returns the list of the component within a list of items
+     *
      * @return
      */
     protected abstract List<Item> getComponentList();
 
     /**
      * Call it to do cell rendering action with group and value items
+     *
      * @param cell
      * @param item
      * @param empty
@@ -248,9 +232,11 @@ public abstract class SimpleDataView<T, G, C extends IndexedCell, M extends Simp
     }
 
     protected abstract void onShowProgress(final String initialText);
+
     protected abstract void onHideProgress();
 
     protected abstract Item getSelection();
+
     protected abstract void setSelection(final Item item);
 
     public Runnable getOnItemsLoaded() {
