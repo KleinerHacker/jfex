@@ -1,6 +1,6 @@
 JFex is a very big Java FX Extension Library. See features below to understood dimensions :)
 
-Please visit the [WIKI](https://github.com/KleinerHacker/jfex/wiki)
+Please visit the [WIKI](https://github.com/KleinerHacker/jfex/wiki) or the [Documentation](https://github.com/KleinerHacker/jfex/releases/download/2.0.3/jremote.chm)
 
 * Components
   * ToolBox
