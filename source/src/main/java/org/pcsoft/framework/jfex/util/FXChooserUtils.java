@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import org.apache.commons.lang.StringUtils;
 import org.pcsoft.framework.jfex.io.UiStateStorage;
 import org.pcsoft.framework.jfex.type.ChooserType;
 
@@ -194,7 +193,7 @@ public final class FXChooserUtils {
         } else {
             fileChooser.getExtensionFilters().setAll(extensionFilters);
         }
-        if (selectedFile != null) {
+        if (selectedFile != null && selectedFile.getParentFile().exists() && selectedFile.getParentFile().isDirectory()) {
             fileChooser.setInitialDirectory(selectedFile.getParentFile());
             fileChooser.setInitialFileName(selectedFile.getName());
         } else {
@@ -236,7 +235,7 @@ public final class FXChooserUtils {
         if (selectedFile != null) {
             directoryChooser.setInitialDirectory(selectedFile);
         } else {
-            if (lastDirectoryProperty != null && !StringUtils.isEmpty(lastDirectoryProperty.get())) {
+            if (lastDirectoryProperty != null && lastDirectoryProperty.get() != null && new File(lastDirectoryProperty.get()).exists()) {
                 directoryChooser.setInitialDirectory(new File(lastDirectoryProperty.get()));
             }
         }
