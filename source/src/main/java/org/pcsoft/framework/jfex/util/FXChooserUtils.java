@@ -193,8 +193,10 @@ public final class FXChooserUtils {
         } else {
             fileChooser.getExtensionFilters().setAll(extensionFilters);
         }
-        if (selectedFile != null && selectedFile.getParentFile().exists() && selectedFile.getParentFile().isDirectory()) {
-            fileChooser.setInitialDirectory(selectedFile.getParentFile());
+        if (selectedFile != null) {
+            if (selectedFile.getParentFile() != null && selectedFile.getParentFile().exists() && selectedFile.getParentFile().isDirectory()) {
+                fileChooser.setInitialDirectory(selectedFile.getParentFile());
+            }
             fileChooser.setInitialFileName(selectedFile.getName());
         } else {
             if (lastDirectoryProperty != null && lastDirectoryProperty.get() != null && new File(lastDirectoryProperty.get()).exists()) {
