@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import org.pcsoft.framework.jfex.controls.ui.component.paint.GradientStopTable?>
+<?import javafx.scene.shape.Rectangle?>
+<fx:root type="VBox" spacing="2" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="org.pcsoft.framework.jfex.controls.ui.component.paint.PaintLinearGradientPaneView">
+    <StackPane>
+        <Rectangle fx:id="rectPreview" width="100" height="50"/>
+    </StackPane>
+
+    <Label text="%cmp.paint.gradient.start" style="-fx-font-weight: bold">
+        <VBox.margin>
+            <Insets top="5.0"/>
+        </VBox.margin>
+    </Label>
+    <Slider fx:id="sldStartX" max="1" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+    <Slider fx:id="sldStartY" max="1" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+
+    <Label text="%cmp.paint.gradient.end" style="-fx-font-weight: bold">
+        <VBox.margin>
+            <Insets top="5.0"/>
+        </VBox.margin>
+    </Label>
+    <Slider fx:id="sldEndX" max="1" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+    <Slider fx:id="sldEndY" max="1" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+
+    <Label text="%cmp.paint.gradient.stops" style="-fx-font-weight: bold">
+        <VBox.margin>
+            <Insets top="5.0"/>
+        </VBox.margin>
+    </Label>
+    <GradientStopTable fx:id="tblStops" prefHeight="100"/>
+</fx:root>

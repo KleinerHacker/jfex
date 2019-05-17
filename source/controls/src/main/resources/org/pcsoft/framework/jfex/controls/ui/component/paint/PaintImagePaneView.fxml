@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<fx:root type="HBox" spacing="5" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="org.pcsoft.framework.jfex.controls.ui.component.paint.PaintImagePaneView" >
+    <ImageView fx:id="imgValue" fitWidth="100" fitHeight="50"/>
+    <Button fx:id="btnChoose" text="..." onAction="#onActionChoose"/>
+</fx:root>

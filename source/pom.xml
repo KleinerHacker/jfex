@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.kleinerhacker</groupId>
     <artifactId>jfex</artifactId>
-    <version>2.0.6-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <url>https://github.com/KleinerHacker/jfex</url>
     <name>JFex</name>
-    <description>Extension Library for JavaFX with useful components, tools, properties etc.</description>
+    <packaging>pom</packaging>
+    <description>Extension Library for Open JavaFX with useful components, tools, properties etc.</description>
     <developers>
         <developer>
             <name>KleinerHacker</name>
@@ -22,6 +24,12 @@
         </license>
     </licenses>
 
+    <modules>
+        <module>commons</module>
+        <module>mvvm</module>
+        <module>controls</module>
+    </modules>
+
     <scm>
         <connection>scm:git:git@github.com:KleinerHacker/jfex.git</connection>
         <developerConnection>scm:git:git@github.com:KleinerHacker/jfex.git</developerConnection>
@@ -34,15 +42,16 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
+                    <version>3.8.1</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>11</source>
+                        <target>11</target>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
@@ -61,6 +70,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>generate-javadoc</id>
@@ -262,23 +272,48 @@
             <dependency>
                 <groupId>org.controlsfx</groupId>
                 <artifactId>controlsfx</artifactId>
-                <version>8.40.12</version>
+                <version>11.0.0</version>
             </dependency>
             <dependency>
-                <groupId>de.saxsys</groupId>
-                <artifactId>mvvmfx</artifactId>
-                <version>1.5.2</version>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-base</artifactId>
+                <version>11.0.2</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>de.saxsys</groupId>
-                <artifactId>mvvmfx-cdi</artifactId>
-                <version>1.5.2</version>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>11.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>11.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-graphics</artifactId>
+                <version>11.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-swing</artifactId>
+                <version>11.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.kleinerhacker</groupId>
+                <artifactId>jftex</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -293,35 +328,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!-- UI -->
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.saxsys</groupId>
-            <artifactId>mvvmfx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.saxsys</groupId>
-            <artifactId>mvvmfx-cdi</artifactId>
         </dependency>
 
         <!-- apache commons -->
@@ -338,24 +347,8 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
+            <version>1.12</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.14</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- test -->
-        <dependency>
-            <groupId>org.pcsoft.framework</groupId>
-            <artifactId>jftex</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <distributionManagement>

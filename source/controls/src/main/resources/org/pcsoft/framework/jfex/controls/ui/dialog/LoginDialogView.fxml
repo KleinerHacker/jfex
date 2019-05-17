@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.pcsoft.framework.jfex.controls.ui.dialog.LoginDialogView">
+    <Label text="%dlg.login.user.title"/>
+    <TextField fx:id="txtUsername" promptText="%dlg.login.user.prompt"/>
+    <Label text="%dlg.login.password.title">
+        <VBox.margin>
+            <Insets top="5.0"/>
+        </VBox.margin>
+    </Label>
+    <PasswordField fx:id="txtPassword" promptText="%dlg.login.password.prompt"/>
+</VBox>

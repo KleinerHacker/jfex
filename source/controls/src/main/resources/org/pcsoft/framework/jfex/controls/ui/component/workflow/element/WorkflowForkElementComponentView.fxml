@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="48.0" type="StackPane"
+         xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="org.pcsoft.framework.jfex.controls.ui.component.workflow.element.WorkflowForkElementComponentView">
+    <SVGPath content="M24,2L46,46L2,46Z"/>
+    <SVGPath content="M24,10L24,32L15,32L15,38L12,35M15,38L18,35M24,32L33,32L33,38L30,35M33,38L36,35" fill="TRANSPARENT" stroke="WHITE" strokeWidth="1.5">
+        <StackPane.margin>
+            <Insets top="5.0"/>
+        </StackPane.margin>
+    </SVGPath>
+</fx:root>
